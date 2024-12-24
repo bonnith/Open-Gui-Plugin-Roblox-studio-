@@ -1,0 +1,66 @@
+local toolbar = plugin:CreateToolbar("OPEN GUI PLUGIN")
+local pluginButton = toolbar:CreateButton(
+	"GUI TWEENER PRO", --Text that will appear below button
+	"TWEENER PRO", --Text that will appear if you hover your mouse on button
+	"rbxassetid://12193036904") --Button icon
+
+local info = DockWidgetPluginGuiInfo.new(
+	Enum.InitialDockState.Right, --From what side gui appears
+	false, --Widget will be initially enabled
+	false, --Don't overdrive previouse enabled state
+	200, --default weight
+	300, --default height
+	150, --minimum weight (optional)
+	150 --minimum height (optional)
+)
+
+local widget = plugin:CreateDockWidgetPluginGui(
+	"OPEN GUI PLUGIN HAHHAHA", --A unique and consistent identifier used to storing the widget’s dock state and other internal details
+	info --dock widget info
+)
+
+pluginButton.Click:Connect(function()
+	widget.Enabled = not widget.Enabled
+end)
+
+widget.Title = "OPEN GUI PLUGIN" --Giving title to our widget gui
+
+local mainframe = script.MainFrame:Clone()
+mainframe.Parent = widget
+
+local selection = game:GetService("Selection")
+local gui = nil
+
+selection.SelectionChanged:Connect(function()
+	local bro = selection:Get()
+	if bro[1] and bro[1]:IsA("GuiObject") then
+		gui = bro[1]
+	else
+		gui = nil
+	end
+end)
+
+mainframe.Create.MouseButton1Click:Connect(function()
+	if gui then
+		require(script.GuiTweener).Create(gui)
+		game:GetService("TweenService"):Create(mainframe.Create,TweenInfo.new(0.2,Enum.EasingStyle.Linear,Enum.EasingDirection.Out,0,true),{BackgroundColor3 = Color3.new(1, 0.882353, 0)}):Play()
+	end
+end)
+mainframe.ToHere.MouseButton1Click:Connect(function()
+	if gui then
+		require(script.GuiTweener).MoveTo(gui)
+		game:GetService("TweenService"):Create(mainframe.ToHere,TweenInfo.new(0.2,Enum.EasingStyle.Linear,Enum.EasingDirection.Out,0,true),{BackgroundColor3 = Color3.new(1, 0.882353, 0)}):Play()
+	end
+end)
+mainframe.ResetPos.MouseButton1Click:Connect(function()
+	if gui then
+		require(script.GuiTweener).ResetFrame(gui)
+		game:GetService("TweenService"):Create(mainframe.ResetPos,TweenInfo.new(0.2,Enum.EasingStyle.Linear,Enum.EasingDirection.Out,0,true),{BackgroundColor3 = Color3.new(1, 0.882353, 0)}):Play()
+	end
+end)
+mainframe.ToCenter.MouseButton1Click:Connect(function()
+	if gui then
+		game:GetService("TweenService"):Create(mainframe.ToCenter,TweenInfo.new(0.2,Enum.EasingStyle.Linear,Enum.EasingDirection.Out,0,true),{BackgroundColor3 = Color3.new(1, 0.882353, 0)}):Play()
+		gui.Position = UDim2.new(0.5,0,0.5,0)
+	end
+end)
